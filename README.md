@@ -9,4 +9,5 @@ python script to pull AQI readings from PurpleAir sensors and tweet hourly updat
 
 ## Notes
 * You'll need to apply for a [Twitter developer account](https://developer.twitter.com/en/apply-for-access.html) to generate the API keys and tokens 
+* Info on PurpleAir API [here](https://github.com/bomeara/purpleairpy/blob/master/api.md)
 * To find the Sensor ID, search the name of the sensor [here](https://www.purpleair.com/json), then pull individual sensor data at https://www.purpleair.com/json?show=[ID]
