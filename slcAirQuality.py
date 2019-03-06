@@ -66,7 +66,9 @@ def updateSensorData():
         sensor.age = data['results'][0]['AGE']
         sensor.lastSeen = data['results'][0]['LastSeen']
         sensor.pm2_5 = data['results'][0]['PM2_5Value']
-        sensor.temp = data['results'][0]['temp_f']
+        sensor.temp = str(int(data['results'][0]['temp_f']) - 7)  # the temperature sensor inside PurpleAir sensors
+        # measure the inside of the sensor housing, not ambient conditions. On the PurpleAir map, we subtract 7F from
+        # the raw temperature values to "better fit" ambient conditions.
         sensor.AQI = aqi.to_iaqi(aqi.POLLUTANT_PM25, sensor.pm2_5, algo=aqi.ALGO_EPA)
         # print(json.dumps(data, indent=4))
     # for sensor in sensors:
@@ -74,10 +76,11 @@ def updateSensorData():
 
 
 def tweet():
-    message = "AQI:\n"
+    message = "Current AQI (temp):\n"
     for sensor in sensors:
-        message += sensor.name + ": " + str(sensor.AQI) + " (" + sensor.temp + "ºF)\n"
-    api.update_status(message)
+        message += sensor.name + str(sensor.AQI) + " (" + sensor.temp + "ºF)\n"
+    # api.update_status(message)
+    print(message)
 
 
 def job():
@@ -86,7 +89,9 @@ def job():
 
 
 authenticate()
+updateSensorData()  # tweet once now
+tweet()
 schedule.every(1).hour.do(job)
-while True:
+while True:  # tweet every hour going forward
     schedule.run_pending()
     time.sleep(1)
