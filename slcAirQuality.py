@@ -29,19 +29,19 @@ class Sensor:
 
 
 downtown = Sensor()
-downtown.name = "Downtown"
+downtown.name = "Downtown: "
 downtown.ID = "5014"
 avenues = Sensor()
-avenues.name = "Avenues"
+avenues.name = "Avenues: "
 avenues.ID = "12987"
 southSaltLake = Sensor()
-southSaltLake.name = "South Salt Lake"
+southSaltLake.name = "South Salt Lake: "
 southSaltLake.ID = "6434"
 uOfU = Sensor()
-uOfU.name = "U of U"
+uOfU.name = "U of U: "
 uOfU.ID = "1539"
 parkCity = Sensor()
-parkCity.name = "Park City"
+parkCity.name = "Park City: "
 parkCity.ID = "12861"
 sensors = [downtown, avenues, southSaltLake, uOfU, parkCity]
 
@@ -67,7 +67,7 @@ def updateSensorData():
         sensor.lastSeen = data['results'][0]['LastSeen']
         sensor.pm2_5 = data['results'][0]['PM2_5Value']
         sensor.temp = str(int(data['results'][0]['temp_f']) - 7)  # the temperature sensor inside PurpleAir sensors
-        # measure the inside of the sensor housing, not ambient conditions. On the PurpleAir map, we subtract 7F from
+        # measure the inside of the sensor housing, not ambient conditions. On the PurpleAir map, 7F is subtracted from
         # the raw temperature values to "better fit" ambient conditions.
         sensor.AQI = aqi.to_iaqi(aqi.POLLUTANT_PM25, sensor.pm2_5, algo=aqi.ALGO_EPA)
         # print(json.dumps(data, indent=4))
@@ -79,8 +79,8 @@ def tweet():
     message = "Current AQI:\n"
     for sensor in sensors:
         message += sensor.name + str(sensor.AQI) + "\n"
-    # api.update_status(message)
-    print(message)
+    api.update_status(message)
+#     print(message)
 
 
 def job():
@@ -89,8 +89,8 @@ def job():
 
 
 authenticate()
-updateSensorData()  # tweet once now
-tweet()
+updateSensorData()
+tweet() # tweet once now
 schedule.every(1).hour.do(job)
 while True:  # tweet every hour going forward
     schedule.run_pending()
