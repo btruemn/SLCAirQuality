@@ -76,9 +76,9 @@ def updateSensorData():
 
 
 def tweet():
-    message = "Current AQI (temp):\n"
+    message = "Current AQI:\n"
     for sensor in sensors:
-        message += sensor.name + str(sensor.AQI) + " (" + sensor.temp + "ºF)\n"
+        message += sensor.name + str(sensor.AQI) + "\n"
     # api.update_status(message)
     print(message)
 
